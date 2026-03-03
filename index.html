@@ -1,17 +1,21 @@
 <!doctype html>
 <html lang="ms" class="h-full">
- <head>
+
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Performance Intelligence Dashboard</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="/_sdk/element_sdk.js"></script>
+  <!-- /_sdk/element_sdk.js removed: only needed on the original hosting platform -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet">
   <style>
-    * { font-family: 'Plus Jakarta Sans', sans-serif; }
-    
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
     .page-container {
       width: 210mm;
       min-height: 297mm;
@@ -20,503 +24,687 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .card-shadow {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
     }
-    
+
     .metric-card {
       background: white;
       border: 1px solid rgba(226, 232, 240, 0.8);
       border-radius: 12px;
     }
-    
+
     .progress-bar-bg {
       background: #e2e8f0;
       border-radius: 100px;
     }
-    
+
     .progress-bar-fill {
       background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
       border-radius: 100px;
       transition: width 0.5s ease;
     }
-    
+
     .circular-progress {
       transform: rotate(-90deg);
     }
-    
+
     .bar-chart-bar {
       background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%);
       border-radius: 4px 4px 0 0;
       transition: height 0.5s ease;
     }
-    
+
     .behaviour-bar {
       background: linear-gradient(90deg, #64748b 0%, #475569 100%);
       border-radius: 100px;
     }
-    
+
     @keyframes slideIn {
-      from { transform: translateX(-100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
-    
+
     @keyframes slideOut {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-100%); opacity: 0; }
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
     }
-    
+
     @media print {
       .page-container {
         box-shadow: none;
         margin: 0;
       }
+
       .print-hidden {
         display: none !important;
       }
     }
   </style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full bg-slate-100 overflow-auto">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+  </style>
+  <!-- /_sdk/data_sdk.js removed: only needed on the original hosting platform -->
+</head>
+
+<body class="h-full bg-slate-100 overflow-auto">
   <div id="login-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-   <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
-    <div class="text-center mb-8">
-     <div class="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center mx-auto mb-4">
-      <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-     </div>
-     <h2 class="text-2xl font-bold text-slate-800 mb-2">Admin Access</h2>
-     <p class="text-sm text-slate-500">Masukkan password untuk akses admin panel</p>
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-800 mb-2">Admin Access</h2>
+        <p class="text-sm text-slate-500">Masukkan password untuk akses admin panel</p>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm font-medium text-slate-600 block mb-2">Password</label>
+          <input type="password" id="login-password"
+            class="w-full px-4 py-3 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            placeholder="Masukkan password">
+          <div id="login-error" class="text-xs text-red-600 mt-2 hidden">Password tidak betul. Cuba lagi.</div>
+        </div>
+        <button id="login-btn"
+          class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg transition shadow-md">Masuk</button>
+      </div>
     </div>
-    <div class="space-y-4">
-     <div>
-      <label class="text-sm font-medium text-slate-600 block mb-2">Password</label> 
-      <input type="password" id="login-password" class="w-full px-4 py-3 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" placeholder="Masukkan password">
-      <div id="login-error" class="text-xs text-red-600 mt-2 hidden">Password tidak betul. Cuba lagi.</div>
-     </div>
-     <button id="login-btn" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg transition shadow-md">Masuk</button>
-    </div>
-   </div>
   </div>
 
   <div class="flex h-full">
-   <div id="admin-panel" class="w-96 bg-white border-r border-slate-200 overflow-y-auto hidden">
-    <div class="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 shadow-sm z-10 flex justify-between items-center">
-     <div>
-      <h2 class="text-lg font-bold">Admin Panel</h2>
-      <p class="text-xs text-blue-100">Update Dashboard Information</p>
-     </div>
-     <button id="logout-btn" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition font-medium">Log Keluar</button>
-    </div>
-    <div class="p-4 space-y-6">
-     
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Logo Sekolah</h3>
-      <div class="space-y-3">
-       <div id="logo-preview" class="w-full h-24 rounded-lg bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden">
-        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-       </div>
-       <div class="flex gap-2">
-        <input type="file" id="logo-upload" accept="image/*" class="hidden"> 
-        <button id="logo-upload-btn" class="flex-1 px-3 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium">Muat Logo</button> 
-        <button id="logo-clear-btn" class="px-3 py-2 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg transition font-medium">Buang</button>
-       </div>
-      </div>
-     </div>
-
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Muat Naik Data (Excel/CSV)</h3>
-      <div class="space-y-3">
-       <input type="file" id="bulk-upload-excel" accept=".xlsx, .xls, .csv" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer">
-       
-       <button id="clear-db-btn" class="w-full px-3 py-2 text-xs text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg transition font-medium hidden">Padam Database</button>
-
-       <div id="student-selector-container" class="hidden mt-4">
-        <label class="text-xs font-medium text-emerald-600 block mb-1">Pilih Pelajar Secara Manual</label>
-        <select id="student-selector" class="w-full px-3 py-2 text-sm border border-emerald-300 bg-emerald-50 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition cursor-pointer">
-         <option value="">-- Sila Pilih Pelajar --</option>
-        </select>
-       </div>
-      </div>
-     </div>
-
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Maklumat Pelajar</h3>
-      <div class="space-y-3">
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Nama Pelajar</label> 
-        <input type="text" id="admin-student-name" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Kelas</label> 
-        <input type="text" id="admin-student-class" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">ID Pelajar</label> 
-        <input type="text" id="admin-student-id" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-      </div>
-     </div>
-
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Skor Akademik (%)</h3>
-      <div class="space-y-2">
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Academic Index</label> 
-        <input type="number" id="admin-academic-index" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Attendance Rate</label> 
-        <input type="number" id="admin-attendance-rate" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Character Score (0-5)</label> 
-        <input type="number" id="admin-character-score" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" step="0.1" min="0" max="5">
-       </div>
-      </div>
-     </div>
-
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Skor Subjek (%)</h3>
-      <div class="space-y-2">
-       <div class="grid grid-cols-2 gap-2">
+    <div id="admin-panel" class="w-96 bg-white border-r border-slate-200 overflow-y-auto hidden">
+      <div
+        class="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 shadow-sm z-10 flex justify-between items-center">
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">BM</label> 
-         <input type="number" id="admin-score-bm" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h2 class="text-lg font-bold">Admin Panel</h2>
+          <p class="text-xs text-blue-100">Update Dashboard Information</p>
         </div>
+        <button id="logout-btn"
+          class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition font-medium">Log
+          Keluar</button>
+      </div>
+      <div class="p-4 space-y-6">
+
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">BI</label> 
-         <input type="number" id="admin-score-bi" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Logo
+            Sekolah</h3>
+          <div class="space-y-3">
+            <div id="logo-preview"
+              class="w-full h-24 rounded-lg bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden">
+              <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <div class="flex gap-2">
+              <input type="file" id="logo-upload" accept="image/*" class="hidden">
+              <button id="logo-upload-btn"
+                class="flex-1 px-3 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium">Muat
+                Logo</button>
+              <button id="logo-clear-btn"
+                class="px-3 py-2 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg transition font-medium">Buang</button>
+            </div>
+          </div>
         </div>
-       </div>
-       <div class="grid grid-cols-2 gap-2">
+
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">Matematik</label> 
-         <input type="number" id="admin-score-math" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Muat
+            Naik Data (Excel/CSV)</h3>
+          <div class="space-y-3">
+
+            <!-- File input + label as single button -->
+            <label for="bulk-upload-excel" id="upload-label"
+              class="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold shadow cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span id="upload-label-text">Pilih &amp; Muat Naik Fail Excel/CSV</span>
+            </label>
+            <input type="file" id="bulk-upload-excel" accept=".xlsx,.xls,.csv" class="hidden">
+
+            <!-- Status message area -->
+            <div id="upload-status" class="hidden text-xs px-3 py-2 rounded-lg"></div>
+
+            <button id="clear-db-btn"
+              class="w-full px-3 py-2 text-xs text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg transition font-medium hidden">Padam
+              Database</button>
+
+            <div id="student-selector-container" class="hidden mt-4">
+              <label class="text-xs font-medium text-emerald-600 block mb-1">Pilih Pelajar Secara Manual</label>
+              <select id="student-selector"
+                class="w-full px-3 py-2 text-sm border border-emerald-300 bg-emerald-50 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition cursor-pointer">
+                <option value="">-- Sila Pilih Pelajar --</option>
+              </select>
+            </div>
+          </div>
         </div>
+
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">Jawi</label> 
-         <input type="number" id="admin-score-jawi" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">
+            Maklumat Pelajar</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Nama Pelajar</label>
+              <input type="text" id="admin-student-name"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Kelas</label>
+              <input type="text" id="admin-student-class"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">ID Pelajar</label>
+              <input type="text" id="admin-student-id"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+          </div>
         </div>
-       </div>
-      </div>
-     </div>
 
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Skor Tingkah Laku (%)</h3>
-      <div class="space-y-2">
-       <div class="grid grid-cols-2 gap-2">
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">Adab</label> 
-         <input type="number" id="admin-score-adab" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Skor
+            Akademik (%)</h3>
+          <div class="space-y-2">
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Academic Index</label>
+              <input type="number" id="admin-academic-index"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                min="0" max="100">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Attendance Rate</label>
+              <input type="number" id="admin-attendance-rate"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                min="0" max="100">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Character Score (0-5)</label>
+              <input type="number" id="admin-character-score"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                step="0.1" min="0" max="5">
+            </div>
+          </div>
         </div>
+
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">Tanggungjawab</label> 
-         <input type="number" id="admin-score-tanggungjawab" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Skor
+            Subjek (%)</h3>
+          <div class="space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">BM</label>
+                <input type="number" id="admin-score-bm"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">BI</label>
+                <input type="number" id="admin-score-bi"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">Matematik</label>
+                <input type="number" id="admin-score-math"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">Jawi</label>
+                <input type="number" id="admin-score-jawi"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+            </div>
+          </div>
         </div>
-       </div>
-       <div class="grid grid-cols-2 gap-2">
+
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">Kerjasama</label> 
-         <input type="number" id="admin-score-kerjasama" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Skor
+            Tingkah Laku (%)</h3>
+          <div class="space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">Adab</label>
+                <input type="number" id="admin-score-adab"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">Tanggungjawab</label>
+                <input type="number" id="admin-score-tanggungjawab"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">Kerjasama</label>
+                <input type="number" id="admin-score-kerjasama"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+              <div>
+                <label class="text-xs font-medium text-slate-600 block mb-1">Disiplin</label>
+                <input type="number" id="admin-score-disiplin"
+                  class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  min="0" max="100">
+              </div>
+            </div>
+          </div>
         </div>
+
         <div>
-         <label class="text-xs font-medium text-slate-600 block mb-1">Disiplin</label> 
-         <input type="number" id="admin-score-disiplin" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" min="0" max="100">
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">
+            Analisis Prestasi</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Strength Area</label>
+              <input type="text" id="admin-strength-area"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Improvement Area</label>
+              <input type="text" id="admin-improvement-area"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Learning Focus</label>
+              <input type="text" id="admin-learning-focus"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+          </div>
         </div>
-       </div>
-      </div>
-     </div>
 
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Analisis Prestasi</h3>
-      <div class="space-y-3">
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Strength Area</label> 
-        <input type="text" id="admin-strength-area" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Improvement Area</label> 
-        <input type="text" id="admin-improvement-area" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Learning Focus</label> 
-        <input type="text" id="admin-learning-focus" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-      </div>
-     </div>
-
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Profil Kecerdasan</h3>
-      <div class="space-y-3">
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Core Strength</label> 
-        <input type="text" id="admin-core-strength" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Growth Area</label> 
-        <input type="text" id="admin-growth-area" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-       <div>
-        <label class="text-xs font-medium text-slate-600 block mb-1">Learning Tendency</label> 
-        <input type="text" id="admin-learning-tendency" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
-       </div>
-      </div>
-     </div>
-
-     <div>
-      <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">Komen Guru</h3>
-      <textarea id="admin-teacher-comment" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" rows="4"></textarea>
-     </div>
-
-     <button id="admin-save-btn" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 rounded-lg transition shadow-md mb-3">Kemas Kini Paparan</button> 
-     
-    </div>
-   </div>
-
-   <div class="flex-1 bg-slate-100 overflow-y-auto p-6">
-    
-    <div class="mb-6 max-w-[210mm] mx-auto print-hidden">
-     <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
-      
-      <div class="relative w-full sm:w-2/3">
-       <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-       <input type="text" id="teacher-search" placeholder="Cari nama atau ID pelajar (cth: Ahmad Danial)..." class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition bg-slate-50 focus:bg-white">
-       
-       <div id="search-results" class="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto">
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2 whitespace-nowrap bg-slate-50 px-4 py-2 rounded-lg border border-slate-100">
-       <div id="db-status-indicator" class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
-       <span id="db-status-text" class="text-sm font-semibold text-slate-600">Tiada Data Excel</span>
-      </div>
-
-     </div>
-    </div>
-
-    <div class="page-container p-6" id="printable-dashboard">
-     
-     <div class="mb-6">
-      <div class="h-1.5 w-full rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-slate-400 mb-5"></div>
-      <div class="flex justify-between items-start">
-       <div class="flex items-center gap-4">
-        <div id="logo-container" class="w-16 h-16 rounded-lg bg-slate-100 border-2 border-slate-300 flex items-center justify-center overflow-hidden flex-shrink-0">
-         <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-        </div>
         <div>
-         <h1 id="main-title" class="text-2xl font-bold text-slate-800 tracking-tight mb-1">STUDENT PERFORMANCE DASHBOARD</h1>
-         <p class="text-sm font-medium text-slate-500">Hari Bicara Ilmu 2026</p>
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">
+            Profil Kecerdasan</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Core Strength</label>
+              <input type="text" id="admin-core-strength"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Growth Area</label>
+              <input type="text" id="admin-growth-area"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-slate-600 block mb-1">Learning Tendency</label>
+              <input type="text" id="admin-learning-tendency"
+                class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition">
+            </div>
+          </div>
         </div>
-       </div>
-       <div class="flex items-center gap-4">
-        <div class="text-right">
-         <h2 id="student-name" class="text-xl font-bold text-slate-800">Ahmad Danial bin Mohd Rizal</h2>
-         <p class="text-sm text-slate-500"><span id="student-class">4 Bestari</span> • <span id="student-id">STU-2026-0472</span></p>
-        </div>
-        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-lg"><span id="student-initials">AD</span></div>
-       </div>
-      </div>
-     </div>
 
-     <div class="grid grid-cols-3 gap-4 mb-5">
-      <div class="metric-card card-shadow p-4">
-       <div class="flex items-center gap-2 mb-3">
-        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Academic Index</span>
-       </div>
-       <div class="flex items-end gap-2">
-        <span id="academic-value" class="text-4xl font-bold text-slate-800">87</span> <span class="text-xl font-medium text-slate-400 mb-1">%</span>
-        <svg class="w-5 h-5 text-emerald-500 mb-2 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-       </div>
-      </div>
-      <div class="metric-card card-shadow p-4">
-       <div class="flex items-center gap-2 mb-3">
-        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Attendance Rate</span>
-       </div>
-       <div class="flex items-end gap-2 mb-3">
-        <span id="attendance-value" class="text-4xl font-bold text-slate-800">96</span> <span class="text-xl font-medium text-slate-400 mb-1">%</span>
-       </div>
-       <div class="progress-bar-bg h-2">
-        <div id="attendance-bar" class="progress-bar-fill h-full" style="width: 96%"></div>
-       </div>
-      </div>
-      <div class="metric-card card-shadow p-4">
-       <div class="flex items-center gap-2 mb-3">
-        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Character Score</span>
-       </div>
-       <div class="flex items-center gap-4">
-        <div class="relative w-16 h-16">
-         <svg class="w-16 h-16 circular-progress" viewbox="0 0 36 36"><path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3" /> <path id="character-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#3b82f6" stroke-width="3" stroke-dasharray="84, 100" stroke-linecap="round" /></svg>
-         <div class="absolute inset-0 flex items-center justify-center"><span id="character-value" class="text-lg font-bold text-slate-800">4.2</span></div>
+        <div>
+          <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 pb-2 border-b border-slate-200">
+            Komen Guru</h3>
+          <textarea id="admin-teacher-comment"
+            class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            rows="4"></textarea>
         </div>
-        <span class="text-sm text-slate-400 font-medium">/ 5</span>
-       </div>
-      </div>
-     </div>
 
-     <div class="grid grid-cols-2 gap-4 mb-5">
-      <div class="metric-card card-shadow p-4">
-       <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg> Subject Performance Analytics
-       </h3>
-       <div class="flex items-end justify-between h-32 px-2">
-        <div class="flex flex-col items-center gap-2 flex-1">
-         <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
-          <div id="bar-bm" class="bar-chart-bar w-full absolute bottom-0" style="height: 85%"></div>
-         </div>
-         <span class="text-xs font-medium text-slate-500">BM</span> <span id="score-bm" class="text-xs font-bold text-slate-700">85%</span>
-        </div>
-        <div class="flex flex-col items-center gap-2 flex-1">
-         <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
-          <div id="bar-bi" class="bar-chart-bar w-full absolute bottom-0" style="height: 78%"></div>
-         </div>
-         <span class="text-xs font-medium text-slate-500">BI</span> <span id="score-bi" class="text-xs font-bold text-slate-700">78%</span>
-        </div>
-        <div class="flex flex-col items-center gap-2 flex-1">
-         <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
-          <div id="bar-math" class="bar-chart-bar w-full absolute bottom-0" style="height: 92%"></div>
-         </div>
-         <span class="text-xs font-medium text-slate-500">MAT</span> <span id="score-math" class="text-xs font-bold text-slate-700">92%</span>
-        </div>
-        <div class="flex flex-col items-center gap-2 flex-1">
-         <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
-          <div id="bar-jawi" class="bar-chart-bar w-full absolute bottom-0" style="height: 90%"></div>
-         </div>
-         <span class="text-xs font-medium text-slate-500">JWI</span> <span id="score-jawi" class="text-xs font-bold text-slate-700">90%</span>
-        </div>
-       </div>
-      </div>
+        <button id="admin-save-btn"
+          class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 rounded-lg transition shadow-md mb-3">Kemas
+          Kini Paparan</button>
 
-      <div class="metric-card card-shadow p-4">
-       <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg> Behavioural Analytics
-       </h3>
-       <div class="space-y-3">
-        <div class="flex items-center gap-3">
-         <span class="text-xs font-medium text-slate-600 w-24">Adab</span>
-         <div class="flex-1 progress-bar-bg h-2.5">
-          <div id="behav-adab" class="behaviour-bar h-full" style="width: 90%"></div>
-         </div>
-         <span id="behav-adab-val" class="text-xs font-bold text-slate-700 w-10 text-right">90%</span>
-        </div>
-        <div class="flex items-center gap-3">
-         <span class="text-xs font-medium text-slate-600 w-24">Tanggungjawab</span>
-         <div class="flex-1 progress-bar-bg h-2.5">
-          <div id="behav-tanggung" class="behaviour-bar h-full" style="width: 85%"></div>
-         </div>
-         <span id="behav-tanggung-val" class="text-xs font-bold text-slate-700 w-10 text-right">85%</span>
-        </div>
-        <div class="flex items-center gap-3">
-         <span class="text-xs font-medium text-slate-600 w-24">Kerjasama</span>
-         <div class="flex-1 progress-bar-bg h-2.5">
-          <div id="behav-kerjasama" class="behaviour-bar h-full" style="width: 88%"></div>
-         </div>
-         <span id="behav-kerjasama-val" class="text-xs font-bold text-slate-700 w-10 text-right">88%</span>
-        </div>
-        <div class="flex items-center gap-3">
-         <span class="text-xs font-medium text-slate-600 w-24">Disiplin</span>
-         <div class="flex-1 progress-bar-bg h-2.5">
-          <div id="behav-disiplin" class="behaviour-bar h-full" style="width: 82%"></div>
-         </div>
-         <span id="behav-disiplin-val" class="text-xs font-bold text-slate-700 w-10 text-right">82%</span>
-        </div>
-       </div>
-       <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-        <span class="text-xs font-semibold text-slate-500">Overall Character Index</span> 
-        <span id="overall-character" class="text-lg font-bold text-blue-600">4.2 <span class="text-sm text-slate-400 font-medium">/ 5</span></span>
-       </div>
       </div>
-     </div>
-
-     <div class="metric-card card-shadow p-4 mb-5">
-      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-       <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg> Performance Insight
-      </h3>
-      <div class="grid grid-cols-3 gap-4">
-       <div class="bg-emerald-50 rounded-lg p-3 border border-emerald-100">
-        <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wide">Strength Area</span>
-        <p id="strength-area" class="text-sm font-medium text-slate-700 mt-2">Matematik &amp; Penyelesaian Masalah Logik</p>
-       </div>
-       <div class="bg-amber-50 rounded-lg p-3 border border-amber-100">
-        <span class="text-xs font-semibold text-amber-700 uppercase tracking-wide">Improvement Area</span>
-        <p id="improvement-area" class="text-sm font-medium text-slate-700 mt-2">Penulisan Karangan Bahasa Inggeris</p>
-       </div>
-       <div class="bg-blue-50 rounded-lg p-3 border border-blue-100">
-        <span class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Learning Focus</span>
-        <p id="learning-focus" class="text-sm font-medium text-slate-700 mt-2">Latihan penulisan kreatif dan pembacaan</p>
-       </div>
-      </div>
-     </div>
-
-     <div class="grid grid-cols-3 gap-4 mb-5">
-      <div class="metric-card card-shadow p-4">
-       <div class="flex items-center gap-2 mb-3">
-        <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-         <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-        </div>
-        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Core Strength</span>
-       </div>
-       <p id="core-strength" class="text-sm font-semibold text-slate-800">Logical-Mathematical Intelligence</p>
-      </div>
-      <div class="metric-card card-shadow p-4">
-       <div class="flex items-center gap-2 mb-3">
-        <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 11l5-5m0 0l5 5m-5-5v12" /></svg>
-        </div>
-        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Growth Area</span>
-       </div>
-       <p id="growth-area" class="text-sm font-semibold text-slate-800">Linguistic Expression &amp; Writing</p>
-      </div>
-      <div class="metric-card card-shadow p-4">
-       <div class="flex items-center gap-2 mb-3">
-        <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
-         <svg class="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-        </div>
-        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Learning Tendency</span>
-       </div>
-       <p id="learning-tendency" class="text-sm font-semibold text-slate-800">Visual-Spatial Learner</p>
-      </div>
-     </div>
-
-     <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
-      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-       <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg> Teacher Professional Comment
-      </h3>
-      <p id="teacher-comment" class="text-sm text-slate-700 leading-relaxed">Ahmad Danial menunjukkan potensi cemerlang dalam bidang Matematik dan Sains dengan keupayaan penyelesaian masalah yang konsisten. Beliau disyorkan untuk meningkatkan kemahiran penulisan Bahasa Inggeris melalui pembacaan ekstensif dan latihan penulisan kreatif. Sikap positif dan kerjasama yang ditunjukkan dalam aktiviti kumpulan amat membanggakan. Teruskan usaha cemerlang!</p>
-     </div>
-
-     <div class="mt-5 pt-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-400">
-      <span>Generated by Student Performance Intelligence System</span> 
-      <span>© 2026 Hari Bicara Ilmu</span>
-     </div>
-
     </div>
 
-    <div class="max-w-[210mm] mx-auto mt-6 pt-4 print-hidden">
-     <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Muat Turun Laporan Semasa</h3>
-     <div class="grid grid-cols-2 gap-3">
-      <button id="dash-download-pdf-btn" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold py-3 rounded-lg transition shadow-md flex items-center justify-center gap-2">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg> Muat Turun PDF 
-      </button> 
-      <button id="dash-download-excel-btn" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg transition shadow-md flex items-center justify-center gap-2">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg> Muat Turun Excel 
+    <div class="flex-1 bg-slate-100 overflow-y-auto p-6">
+
+      <div class="mb-6 max-w-[210mm] mx-auto print-hidden">
+        <div
+          class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+
+          <div class="relative w-full sm:w-2/3">
+            <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none"
+              stroke="currentColor" viewbox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" id="teacher-search" placeholder="Cari nama atau ID pelajar (cth: Ahmad Danial)..."
+              class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition bg-slate-50 focus:bg-white">
+
+            <div id="search-results"
+              class="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto">
+            </div>
+          </div>
+
+          <div
+            class="flex items-center gap-2 whitespace-nowrap bg-slate-50 px-4 py-2 rounded-lg border border-slate-100">
+            <div id="db-status-indicator" class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+            <span id="db-status-text" class="text-sm font-semibold text-slate-600">Tiada Data Excel</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="page-container p-6" id="printable-dashboard">
+
+        <div class="mb-6">
+          <div class="h-1.5 w-full rounded-full bg-gradient-to-r from-blue-600 via-blue-500 to-slate-400 mb-5"></div>
+          <div class="flex justify-between items-start">
+            <div class="flex items-center gap-4">
+              <div id="logo-container"
+                class="w-16 h-16 rounded-lg bg-slate-100 border-2 border-slate-300 flex items-center justify-center overflow-hidden flex-shrink-0">
+                <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <div>
+                <h1 id="main-title" class="text-2xl font-bold text-slate-800 tracking-tight mb-1">STUDENT PERFORMANCE
+                  DASHBOARD</h1>
+                <p class="text-sm font-medium text-slate-500">Hari Bicara Ilmu 2026</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="text-right">
+                <h2 id="student-name" class="text-xl font-bold text-slate-800">Ahmad Danial bin Mohd Rizal</h2>
+                <p class="text-sm text-slate-500"><span id="student-class">4 Bestari</span> • <span
+                    id="student-id">STU-2026-0472</span></p>
+              </div>
+              <div
+                class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <span id="student-initials">AD</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mb-5">
+          <div class="metric-card card-shadow p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Academic Index</span>
+            </div>
+            <div class="flex items-end gap-2">
+              <span id="academic-value" class="text-4xl font-bold text-slate-800">87</span> <span
+                class="text-xl font-medium text-slate-400 mb-1">%</span>
+              <svg class="w-5 h-5 text-emerald-500 mb-2 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+          </div>
+          <div class="metric-card card-shadow p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Attendance Rate</span>
+            </div>
+            <div class="flex items-end gap-2 mb-3">
+              <span id="attendance-value" class="text-4xl font-bold text-slate-800">96</span> <span
+                class="text-xl font-medium text-slate-400 mb-1">%</span>
+            </div>
+            <div class="progress-bar-bg h-2">
+              <div id="attendance-bar" class="progress-bar-fill h-full" style="width: 96%"></div>
+            </div>
+          </div>
+          <div class="metric-card card-shadow p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Character Score</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="relative w-16 h-16">
+                <svg class="w-16 h-16 circular-progress" viewbox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none"
+                    stroke="#e2e8f0" stroke-width="3" />
+                  <path id="character-circle"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none"
+                    stroke="#3b82f6" stroke-width="3" stroke-dasharray="84, 100" stroke-linecap="round" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center"><span id="character-value"
+                    class="text-lg font-bold text-slate-800">4.2</span></div>
+              </div>
+              <span class="text-sm text-slate-400 font-medium">/ 5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-5">
+          <div class="metric-card card-shadow p-4">
+            <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg> Subject Performance Analytics
+            </h3>
+            <div class="flex items-end justify-between h-32 px-2">
+              <div class="flex flex-col items-center gap-2 flex-1">
+                <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
+                  <div id="bar-bm" class="bar-chart-bar w-full absolute bottom-0" style="height: 85%"></div>
+                </div>
+                <span class="text-xs font-medium text-slate-500">BM</span> <span id="score-bm"
+                  class="text-xs font-bold text-slate-700">85%</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 flex-1">
+                <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
+                  <div id="bar-bi" class="bar-chart-bar w-full absolute bottom-0" style="height: 78%"></div>
+                </div>
+                <span class="text-xs font-medium text-slate-500">BI</span> <span id="score-bi"
+                  class="text-xs font-bold text-slate-700">78%</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 flex-1">
+                <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
+                  <div id="bar-math" class="bar-chart-bar w-full absolute bottom-0" style="height: 92%"></div>
+                </div>
+                <span class="text-xs font-medium text-slate-500">MAT</span> <span id="score-math"
+                  class="text-xs font-bold text-slate-700">92%</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 flex-1">
+                <div class="w-full max-w-8 h-24 bg-slate-100 rounded relative flex items-end justify-center">
+                  <div id="bar-jawi" class="bar-chart-bar w-full absolute bottom-0" style="height: 90%"></div>
+                </div>
+                <span class="text-xs font-medium text-slate-500">JWI</span> <span id="score-jawi"
+                  class="text-xs font-bold text-slate-700">90%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-card card-shadow p-4">
+            <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg> Behavioural Analytics
+            </h3>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-medium text-slate-600 w-24">Adab</span>
+                <div class="flex-1 progress-bar-bg h-2.5">
+                  <div id="behav-adab" class="behaviour-bar h-full" style="width: 90%"></div>
+                </div>
+                <span id="behav-adab-val" class="text-xs font-bold text-slate-700 w-10 text-right">90%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-medium text-slate-600 w-24">Tanggungjawab</span>
+                <div class="flex-1 progress-bar-bg h-2.5">
+                  <div id="behav-tanggung" class="behaviour-bar h-full" style="width: 85%"></div>
+                </div>
+                <span id="behav-tanggung-val" class="text-xs font-bold text-slate-700 w-10 text-right">85%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-medium text-slate-600 w-24">Kerjasama</span>
+                <div class="flex-1 progress-bar-bg h-2.5">
+                  <div id="behav-kerjasama" class="behaviour-bar h-full" style="width: 88%"></div>
+                </div>
+                <span id="behav-kerjasama-val" class="text-xs font-bold text-slate-700 w-10 text-right">88%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-medium text-slate-600 w-24">Disiplin</span>
+                <div class="flex-1 progress-bar-bg h-2.5">
+                  <div id="behav-disiplin" class="behaviour-bar h-full" style="width: 82%"></div>
+                </div>
+                <span id="behav-disiplin-val" class="text-xs font-bold text-slate-700 w-10 text-right">82%</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500">Overall Character Index</span>
+              <span id="overall-character" class="text-lg font-bold text-blue-600">4.2 <span
+                  class="text-sm text-slate-400 font-medium">/ 5</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metric-card card-shadow p-4 mb-5">
+          <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg> Performance Insight
+          </h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-emerald-50 rounded-lg p-3 border border-emerald-100">
+              <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wide">Strength Area</span>
+              <p id="strength-area" class="text-sm font-medium text-slate-700 mt-2">Matematik &amp; Penyelesaian Masalah
+                Logik</p>
+            </div>
+            <div class="bg-amber-50 rounded-lg p-3 border border-amber-100">
+              <span class="text-xs font-semibold text-amber-700 uppercase tracking-wide">Improvement Area</span>
+              <p id="improvement-area" class="text-sm font-medium text-slate-700 mt-2">Penulisan Karangan Bahasa
+                Inggeris</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-3 border border-blue-100">
+              <span class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Learning Focus</span>
+              <p id="learning-focus" class="text-sm font-medium text-slate-700 mt-2">Latihan penulisan kreatif dan
+                pembacaan</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mb-5">
+          <div class="metric-card card-shadow p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Core Strength</span>
+            </div>
+            <p id="core-strength" class="text-sm font-semibold text-slate-800">Logical-Mathematical Intelligence</p>
+          </div>
+          <div class="metric-card card-shadow p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Growth Area</span>
+            </div>
+            <p id="growth-area" class="text-sm font-semibold text-slate-800">Linguistic Expression &amp; Writing</p>
+          </div>
+          <div class="metric-card card-shadow p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
+                <svg class="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Learning Tendency</span>
+            </div>
+            <p id="learning-tendency" class="text-sm font-semibold text-slate-800">Visual-Spatial Learner</p>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
+          <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg> Teacher Professional Comment
+          </h3>
+          <p id="teacher-comment" class="text-sm text-slate-700 leading-relaxed">Ahmad Danial menunjukkan potensi
+            cemerlang dalam bidang Matematik dan Sains dengan keupayaan penyelesaian masalah yang konsisten. Beliau
+            disyorkan untuk meningkatkan kemahiran penulisan Bahasa Inggeris melalui pembacaan ekstensif dan latihan
+            penulisan kreatif. Sikap positif dan kerjasama yang ditunjukkan dalam aktiviti kumpulan amat membanggakan.
+            Teruskan usaha cemerlang!</p>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-400">
+          <span>Generated by Student Performance Intelligence System</span>
+          <span>© 2026 Hari Bicara Ilmu</span>
+        </div>
+
+      </div>
+
+      <div class="max-w-[210mm] mx-auto mt-6 pt-4 print-hidden">
+        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Muat Turun Laporan Semasa</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <button id="dash-download-pdf-btn"
+            class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold py-3 rounded-lg transition shadow-md flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg> Muat Turun PDF
+          </button>
+          <button id="dash-download-excel-btn"
+            class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg transition shadow-md flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg> Muat Turun Excel
+          </button>
+        </div>
+      </div>
+
+      <button id="admin-trigger-btn"
+        class="fixed bottom-6 right-6 w-12 h-12 rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition shadow-lg hover:shadow-xl z-40 print-hidden"
+        title="Admin Access">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
       </button>
-     </div>
+
     </div>
-
-    <button id="admin-trigger-btn" class="fixed bottom-6 right-6 w-12 h-12 rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition shadow-lg hover:shadow-xl z-40 print-hidden" title="Admin Access">
-     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-    </button>
-
-   </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
+  <script src="xlsx.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     const defaultConfig = {
@@ -544,27 +732,27 @@
     };
 
     function getInitials(name) {
-      if(!name) return '';
+      if (!name) return '';
       return name.split(' ').filter(n => n.length > 2).slice(0, 2).map(n => n[0].toUpperCase()).join('');
     }
 
     // This updates the visual dashboard
     function onConfigChange(config) {
       const c = { ...defaultConfig, ...config };
-      
+
       document.getElementById('student-name').textContent = c.student_name;
       document.getElementById('student-class').textContent = c.student_class;
       document.getElementById('student-id').textContent = c.student_id;
       document.getElementById('student-initials').textContent = getInitials(c.student_name);
-      
+
       document.getElementById('academic-value').textContent = c.academic_index;
       document.getElementById('attendance-value').textContent = c.attendance_rate;
       document.getElementById('attendance-bar').style.width = c.attendance_rate + '%';
       document.getElementById('character-value').textContent = c.character_score;
-      
+
       const charPercent = (parseFloat(c.character_score) / 5) * 100;
       document.getElementById('character-circle').setAttribute('stroke-dasharray', `${charPercent || 0}, 100`);
-      
+
       document.getElementById('bar-bm').style.height = c.score_bm + '%';
       document.getElementById('score-bm').textContent = c.score_bm + '%';
       document.getElementById('bar-bi').style.height = c.score_bi + '%';
@@ -573,7 +761,7 @@
       document.getElementById('score-math').textContent = c.score_math + '%';
       document.getElementById('bar-jawi').style.height = c.score_jawi + '%';
       document.getElementById('score-jawi').textContent = c.score_jawi + '%';
-      
+
       document.getElementById('behav-adab').style.width = c.score_adab + '%';
       document.getElementById('behav-adab-val').textContent = c.score_adab + '%';
       document.getElementById('behav-tanggung').style.width = c.score_tanggungjawab + '%';
@@ -582,15 +770,15 @@
       document.getElementById('behav-kerjasama-val').textContent = c.score_kerjasama + '%';
       document.getElementById('behav-disiplin').style.width = c.score_disiplin + '%';
       document.getElementById('behav-disiplin-val').textContent = c.score_disiplin + '%';
-      
+
       const avgBehav = (parseFloat(c.score_adab) + parseFloat(c.score_tanggungjawab) + parseFloat(c.score_kerjasama) + parseFloat(c.score_disiplin)) / 4;
       const overallChar = (avgBehav / 100 * 5).toFixed(1);
       document.getElementById('overall-character').innerHTML = (isNaN(overallChar) ? '0' : overallChar) + ' <span class="text-sm text-slate-400 font-medium">/ 5</span>';
-      
+
       document.getElementById('strength-area').textContent = c.strength_area;
       document.getElementById('improvement-area').textContent = c.improvement_area;
       document.getElementById('learning-focus').textContent = c.learning_focus;
-      
+
       document.getElementById('core-strength').textContent = c.core_strength;
       document.getElementById('growth-area').textContent = c.growth_area;
       document.getElementById('learning-tendency').textContent = c.learning_tendency;
@@ -643,15 +831,147 @@
     // ===== DATABASE / BULK UPLOAD PERSISTENCE LOGIC =====
     let studentDatabase = [];
 
+    // Maps Excel column headers (Malay or English) → internal JS keys
+    const columnMap = {
+      // Student info
+      'Nama Pelajar': 'student_name',
+      'nama pelajar': 'student_name',
+      'student_name': 'student_name',
+      'name': 'student_name',
+      'nama': 'student_name',
+
+      'Kelas': 'student_class',
+      'kelas': 'student_class',
+      'student_class': 'student_class',
+      'class': 'student_class',
+
+      'ID Pelajar': 'student_id',
+      'id pelajar': 'student_id',
+      'student_id': 'student_id',
+      'id': 'student_id',
+
+      // Academic metrics
+      'Academic Index (%)': 'academic_index',
+      'academic index (%)': 'academic_index',
+      'academic_index': 'academic_index',
+      'Academic Index': 'academic_index',
+
+      'Attendance Rate (%)': 'attendance_rate',
+      'attendance rate (%)': 'attendance_rate',
+      'attendance_rate': 'attendance_rate',
+      'Attendance Rate': 'attendance_rate',
+
+      'Character Score (0-5)': 'character_score',
+      'character score (0-5)': 'character_score',
+      'character_score': 'character_score',
+      'Character Score': 'character_score',
+
+      // Subject scores
+      'Bahasa Melayu (%)': 'score_bm',
+      'bahasa melayu (%)': 'score_bm',
+      'score_bm': 'score_bm',
+      'BM': 'score_bm',
+      'bm': 'score_bm',
+
+      'Bahasa Inggeris (%)': 'score_bi',
+      'bahasa inggeris (%)': 'score_bi',
+      'score_bi': 'score_bi',
+      'BI': 'score_bi',
+      'bi': 'score_bi',
+      'English (%)': 'score_bi',
+
+      'Matematik (%)': 'score_math',
+      'matematik (%)': 'score_math',
+      'score_math': 'score_math',
+      'Math (%)': 'score_math',
+      'Matematik': 'score_math',
+
+      // Jawi / Sains / Pendidikan Islam → score_jawi slot
+      'Jawi (%)': 'score_jawi',
+      'jawi (%)': 'score_jawi',
+      'score_jawi': 'score_jawi',
+      'Jawi': 'score_jawi',
+      'Pendidikan Islam (%)': 'score_jawi',
+      'pendidikan islam (%)': 'score_jawi',
+      'Sains (%)': 'score_jawi',
+      'sains (%)': 'score_jawi',
+
+      // Behaviour scores
+      'Adab (%)': 'score_adab',
+      'adab (%)': 'score_adab',
+      'score_adab': 'score_adab',
+      'Adab': 'score_adab',
+
+      'Tanggungjawab (%)': 'score_tanggungjawab',
+      'tanggungjawab (%)': 'score_tanggungjawab',
+      'score_tanggungjawab': 'score_tanggungjawab',
+      'Tanggungjawab': 'score_tanggungjawab',
+
+      'Kerjasama (%)': 'score_kerjasama',
+      'kerjasama (%)': 'score_kerjasama',
+      'score_kerjasama': 'score_kerjasama',
+      'Kerjasama': 'score_kerjasama',
+
+      'Disiplin (%)': 'score_disiplin',
+      'disiplin (%)': 'score_disiplin',
+      'score_disiplin': 'score_disiplin',
+      'Disiplin': 'score_disiplin',
+
+      // Performance insights
+      'Strength Area': 'strength_area',
+      'strength area': 'strength_area',
+      'strength_area': 'strength_area',
+
+      'Improvement Area': 'improvement_area',
+      'improvement area': 'improvement_area',
+      'improvement_area': 'improvement_area',
+
+      'Learning Focus': 'learning_focus',
+      'learning focus': 'learning_focus',
+      'learning_focus': 'learning_focus',
+
+      // Intelligence profile
+      'Core Strength': 'core_strength',
+      'core strength': 'core_strength',
+      'core_strength': 'core_strength',
+
+      'Growth Area': 'growth_area',
+      'growth area': 'growth_area',
+      'growth_area': 'growth_area',
+
+      'Learning Tendency': 'learning_tendency',
+      'learning tendency': 'learning_tendency',
+      'learning_tendency': 'learning_tendency',
+
+      // Teacher comment
+      'Teacher Comment': 'teacher_comment',
+      'teacher comment': 'teacher_comment',
+      'teacher_comment': 'teacher_comment',
+      'Komen Guru': 'teacher_comment',
+      'komen guru': 'teacher_comment',
+    };
+
+    function normalizeRow(rawRow) {
+      const normalized = {};
+      Object.entries(rawRow).forEach(([key, value]) => {
+        const trimmedKey = String(key).trim();
+        const mappedKey = columnMap[trimmedKey] || columnMap[trimmedKey.toLowerCase()];
+        if (mappedKey) {
+          normalized[mappedKey] = value !== undefined && value !== null ? String(value).trim() : '';
+        }
+      });
+      return normalized;
+    }
+
     function updateDatabaseUI() {
-      if(studentDatabase.length === 0) {
+      if (studentDatabase.length === 0) {
         document.getElementById('db-status-indicator').classList.replace('bg-emerald-500', 'bg-red-500');
         document.getElementById('db-status-text').textContent = "Tiada Data Excel";
         document.getElementById('student-selector-container').classList.add('hidden');
         document.getElementById('clear-db-btn').classList.add('hidden');
         return;
       }
-      
+
       document.getElementById('db-status-indicator').classList.replace('bg-red-500', 'bg-emerald-500');
       document.getElementById('db-status-text').textContent = `${studentDatabase.length} Pelajar Direkod`;
       document.getElementById('clear-db-btn').classList.remove('hidden');
@@ -679,48 +999,85 @@
       }
     }
 
-    // ===== BULK EXCEL UPLOAD HANDLER =====
-    document.getElementById('bulk-upload-excel').addEventListener('change', function(e) {
-      const file = e.target.files[0];
+    // Upload: fires immediately when a file is chosen via the label button
+    document.getElementById('bulk-upload-excel').addEventListener('change', function (e) {
+      var file = e.target.files[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = function(event) {
+      var labelEl = document.getElementById('upload-label');
+      var statusEl = document.getElementById('upload-status');
+
+      function setStatus(msg, color) {
+        statusEl.textContent = msg;
+        statusEl.className = 'text-xs px-3 py-2 rounded-lg ' + (color || 'bg-slate-100 text-slate-600');
+        statusEl.classList.remove('hidden');
+      }
+
+      function resetLabel() {
+        labelEl.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg><span id="upload-label-text">Pilih & Muat Naik Fail Excel/CSV</span>';
+        labelEl.className = 'w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold shadow cursor-pointer';
+      }
+
+      if (typeof XLSX === 'undefined') {
+        setStatus('❌ Pustaka XLSX belum dimuatkan. Semak internet & refresh halaman.', 'bg-red-50 text-red-700');
+        return;
+      }
+
+      setStatus('⏳ Sedang membaca fail: ' + file.name, 'bg-blue-50 text-blue-700');
+      labelEl.style.opacity = '0.6';
+      labelEl.style.pointerEvents = 'none';
+
+      function processWorkbook(workbook) {
         try {
-          const data = new Uint8Array(event.target.result);
-          const workbook = XLSX.read(data, {type: 'array'});
-          const firstSheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[firstSheetName];
-          
-          const rawData = XLSX.utils.sheet_to_json(worksheet);
+          var sheet = workbook.Sheets[workbook.SheetNames[0]];
+          var rawRows = XLSX.utils.sheet_to_json(sheet);
+          studentDatabase = rawRows.map(function (r) { return normalizeRow(r); }).filter(function (r) { return r.student_name; });
 
-          // FIX 1: Clean up Excel headers (removes accidental spaces from column names)
-          studentDatabase = rawData.map(row => {
-            const cleanRow = {};
-            for (let key in row) {
-              cleanRow[key.trim()] = row[key]; 
-            }
-            return cleanRow;
-          });
-
-          if(studentDatabase.length > 0) {
+          if (studentDatabase.length > 0) {
             localStorage.setItem('hari-bicara-ilmu-db', JSON.stringify(studentDatabase));
             updateDatabaseUI();
-            alert(`Berjaya muat naik ${studentDatabase.length} rekod pelajar! Sila cuba gunakan ruangan carian (Search).`);
+            onConfigChange(studentDatabase[0]);
+            updateAdminFields(studentDatabase[0]);
+            setStatus('✅ Berjaya! ' + studentDatabase.length + ' pelajar dimuatkan.', 'bg-emerald-50 text-emerald-700');
+            resetLabel();
           } else {
-            alert("Fail Excel kosong atau format tidak sah.");
+            var firstRow = XLSX.utils.sheet_to_json(sheet)[0] || {};
+            var found = Object.keys(firstRow).join(', ') || '(kosong)';
+            setStatus('⚠️ Tiada data dijumpai. Header fail: ' + found, 'bg-amber-50 text-amber-700');
+            resetLabel();
           }
-        } catch (error) {
-          console.error("Ralat muat naik Excel:", error);
-          alert("Terdapat ralat semasa membaca fail Excel. Pastikan ia format yang betul.");
+        } catch (err) {
+          setStatus('❌ Ralat: ' + err.message, 'bg-red-50 text-red-700');
+          console.error(err);
+          resetLabel();
         }
-      };
-      reader.readAsArrayBuffer(file);
+        labelEl.style.opacity = '';
+        labelEl.style.pointerEvents = '';
+        e.target.value = '';
+      }
+
+      if (file.name.toLowerCase().endsWith('.csv')) {
+        var tr = new FileReader();
+        tr.onerror = function () { setStatus('❌ Gagal membaca CSV.', 'bg-red-50 text-red-700'); resetLabel(); };
+        tr.onload = function (ev) {
+          try { processWorkbook(XLSX.read(ev.target.result, { type: 'string' })); }
+          catch (err) { setStatus('❌ ' + err.message, 'bg-red-50 text-red-700'); resetLabel(); }
+        };
+        tr.readAsText(file);
+      } else {
+        var br = new FileReader();
+        br.onerror = function () { setStatus('❌ Gagal membaca Excel.', 'bg-red-50 text-red-700'); resetLabel(); };
+        br.onload = function (ev) {
+          try { processWorkbook(XLSX.read(new Uint8Array(ev.target.result), { type: 'array' })); }
+          catch (err) { setStatus('❌ ' + err.message, 'bg-red-50 text-red-700'); resetLabel(); }
+        };
+        br.readAsArrayBuffer(file);
+      }
     });
 
     // Clear Database Button
     document.getElementById('clear-db-btn').addEventListener('click', () => {
-      if(confirm("Adakah anda pasti mahu memadam semua rekod pelajar dari browser ini?")) {
+      if (confirm("Adakah anda pasti mahu memadam semua rekod pelajar dari browser ini?")) {
         localStorage.removeItem('hari-bicara-ilmu-db');
         studentDatabase = [];
         updateDatabaseUI();
@@ -729,7 +1086,7 @@
     });
 
     // When admin selects a student from dropdown
-    document.getElementById('student-selector').addEventListener('change', function(e) {
+    document.getElementById('student-selector').addEventListener('change', function (e) {
       const index = e.target.value;
       if (index === "") return;
       const student = studentDatabase[index];
@@ -742,21 +1099,19 @@
     const searchInput = document.getElementById('teacher-search');
     const searchResults = document.getElementById('search-results');
 
-    searchInput.addEventListener('input', function(e) {
-      const term = e.target.value.toLowerCase().trim();
+    searchInput.addEventListener('input', function (e) {
+      const term = e.target.value.toLowerCase();
       searchResults.innerHTML = '';
-      
+
       if (term.length === 0 || studentDatabase.length === 0) {
         searchResults.classList.add('hidden');
         return;
       }
 
-      // FIX 2: Safely convert everything to a text string before searching
-      const filtered = studentDatabase.filter(s => {
-        const name = s.student_name ? String(s.student_name).toLowerCase() : '';
-        const id = s.student_id ? String(s.student_id).toLowerCase() : '';
-        return name.includes(term) || id.includes(term);
-      });
+      const filtered = studentDatabase.filter(s =>
+        (s.student_name && s.student_name.toLowerCase().includes(term)) ||
+        (s.student_id && s.student_id.toLowerCase().includes(term))
+      );
 
       if (filtered.length === 0) {
         searchResults.innerHTML = '<div class="px-4 py-3 text-sm text-slate-500">Tiada padanan dijumpai</div>';
@@ -767,37 +1122,31 @@
       filtered.forEach(student => {
         const div = document.createElement('div');
         div.className = 'px-4 py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-0';
-        
-        // Ensure we display text even if the field is technically a number
-        const displayName = student.student_name ? String(student.student_name) : 'Tiada Nama';
-        const displayId = student.student_id ? String(student.student_id) : '-';
-        const displayClass = student.student_class ? String(student.student_class) : '-';
-
         div.innerHTML = `
-          <div class="font-semibold text-sm text-slate-800">${displayName}</div>
-          <div class="text-xs text-slate-500">${displayId} • ${displayClass}</div>
+          <div class="font-semibold text-sm text-slate-800">${student.student_name}</div>
+          <div class="text-xs text-slate-500">${student.student_id} • ${student.student_class}</div>
         `;
-        
+
         div.addEventListener('click', () => {
           onConfigChange(student);
           updateAdminFields(student);
-          
+
           const selector = document.getElementById('student-selector');
           const index = studentDatabase.findIndex(s => s.student_id === student.student_id);
           if (index !== -1 && selector) selector.value = index;
 
           searchResults.classList.add('hidden');
-          searchInput.value = displayName;
+          searchInput.value = student.student_name;
         });
-        
+
         searchResults.appendChild(div);
       });
-      
+
       searchResults.classList.remove('hidden');
     });
 
     // Close search dropdown when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
         searchResults.classList.add('hidden');
       }
@@ -835,6 +1184,7 @@
     });
 
     // ===== LOGIN & PANEL VISIBILITY =====
+    // 🔑 Change the password below to something more secure before sharing!
     const CORRECT_PASSWORD = '1234';
     let isLoggedIn = false;
 
@@ -863,7 +1213,7 @@
 
     document.getElementById('login-btn').addEventListener('click', handleLogin);
     document.getElementById('login-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
-    
+
     document.getElementById('logout-btn').addEventListener('click', () => {
       localStorage.removeItem('admin-login');
       checkLoginStatus();
@@ -886,7 +1236,7 @@
     document.getElementById('dash-download-pdf-btn').addEventListener('click', () => {
       const element = document.getElementById('printable-dashboard');
       const studentName = document.getElementById('student-name').textContent.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-      
+
       const opt = {
         margin: 10,
         filename: `laporan_${studentName}.pdf`,
@@ -947,5 +1297,6 @@
       updateAdminFields(defaultConfig);
     };
   </script>
- </body>
+</body>
+
 </html>
