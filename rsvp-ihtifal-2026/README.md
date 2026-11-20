@@ -14,4 +14,4 @@ Untuk menyambung data langsung:
 2. Pilih tab **Ringkasan Awam** sahaja dan format **Comma-separated values (.csv)**, kemudian **Publish**.
 3. Salin pautan yang diberi dan letakkan dalam `CSV_URL` di `index.html`.
 
-Selagi `CSV_URL` kosong, halaman memaparkan salinan angka setakat 17 Nov 2026.
+Selagi `CSV_URL` kosong, halaman memaparkan salinan angka setakat 20 Nov 2026, 1.59 petang.
