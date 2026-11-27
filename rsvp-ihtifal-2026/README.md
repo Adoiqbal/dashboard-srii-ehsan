@@ -10,4 +10,4 @@ Angka dibaca daripada tab **Ringkasan Awam** dalam Google Sheet "RSVP IHTIFAL 20
 
 Tab itu diterbitkan (File → Share → Publish to web, tab Ringkasan Awam sahaja, CSV), dan pautannya ada dalam `CSV_URL` di `index.html`. Halaman memuat semula angka setiap 5 minit.
 
-Jika pautan gagal, halaman memaparkan salinan angka sandaran setakat 20 Nov 2026 bersama notis.
+Jika pautan gagal, halaman memaparkan salinan angka sandaran setakat 27 Nov 2026 bersama notis.
