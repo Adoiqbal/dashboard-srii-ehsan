@@ -8,10 +8,6 @@ Halaman ini hanya memaparkan jumlah (tiada nama, telefon atau e-mel ibu bapa).
 
 Angka dibaca daripada tab **Ringkasan Awam** dalam Google Sheet "RSVP IHTIFAL 2026 (Responses)". Tab itu hanya mengandungi formula jumlah.
 
-Untuk menyambung data langsung:
+Tab itu diterbitkan (File → Share → Publish to web, tab Ringkasan Awam sahaja, CSV), dan pautannya ada dalam `CSV_URL` di `index.html`. Halaman memuat semula angka setiap 5 minit.
 
-1. Dalam Google Sheet, pilih **File → Share → Publish to web**.
-2. Pilih tab **Ringkasan Awam** sahaja dan format **Comma-separated values (.csv)**, kemudian **Publish**.
-3. Salin pautan yang diberi dan letakkan dalam `CSV_URL` di `index.html`.
-
-Selagi `CSV_URL` kosong, halaman memaparkan salinan angka setakat 20 Nov 2026, 1.59 petang.
+Jika pautan gagal, halaman memaparkan salinan angka sandaran setakat 27 Nov 2026 bersama notis.
